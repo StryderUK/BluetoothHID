@@ -39,7 +39,7 @@ C:\Users\<Username>\AppData\Arduino15\packages\esp32\hardware\esp32
 
 ### Basic Usage
 
-See example code ([DualShock4.ino](examples/DualShock4.ino)) for how to use the library
+See example code ([DualShock4.ino](examples/DualShock4/DualShock4.ino)) for how to use the library
 
 1. Open DualShock 4 example and upload to ESP32.
 2. Put DualShock 4 into pairing mode (Holding share + PS Buttons together while controller is off, its easier to hold the share button first)
