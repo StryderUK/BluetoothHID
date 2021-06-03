@@ -12,9 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#pragma once
+#ifndef __BLUETOOTHHID_H__
+#define __BLUETOOTHHID_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define CONFIG_BT_HID_HOST_ENABLED
+
 #include "bta_hh/common/bluedroid_user_config.h"
 #include "bta_hh/common/bt_target.h"
 #include "esp_hid/esp_hidh.h"
@@ -39,8 +45,12 @@
 #include "esp_hid/private/esp_hidh_private.h"
 #include "gap/esp_hid_gap.h"
 
-//memcpy
+#ifdef __cplusplus
+}
+#endif
+
 #include <cstring>
+
 
 #define BTHID_TAG "BluetoothHID"
 
@@ -197,7 +207,7 @@ private:
       m_State = BTHIDState::Disconnected;
       m_pDev = NULL;
 
-      BHIDCloseEvt CloseReport = { param->close.reason };
+      BHIDCloseEvt CloseReport = {param->close.reason};
       this->OnCloseDevice(&CloseReport);
       // Manages with BluetoothHID class?
       //esp_hidh_dev_free(param->close.dev);
@@ -241,10 +251,18 @@ public:
     ESP_ERROR_CHECK(esp_hid_gap_init(ESP_BT_MODE_BTDM));
     ESP_ERROR_CHECK(esp_ble_gattc_register_callback(esp_hidh_gattc_event_handler));
     esp_hidh_config_t config = {
-        .callback = hidh_callback,
+        .callback = CBluetoothHID::hidh_callback,
     };
     ESP_ERROR_CHECK(esp_hidh_init(&config));
     return true;
+  }
+
+  // TODO: add COD and/or Name filter
+  // TODO: add scan timeout programically
+  // TODO: Add complete callback
+  void ScanAndConnectHIDDevice()
+  {
+    xTaskCreate(&hid_device_search, "hid_device_search", 4 * 1024, NULL, 2, NULL);
   }
 
   bool RegisterDevice(CBluetoothDeviceBase *pDevice)
@@ -335,77 +353,62 @@ private:
 
   dev_context *m_pBluetoothDevices[MAX_BT_DEVICES];
   size_t m_BluetoothDevicesSize;
-  static void hidh_callback(void *handler_args, esp_event_base_t base, int32_t id, void *event_data)
+
+#ifndef SCAN_DURATION_SECONDS
+#define SCAN_DURATION_SECONDS 5
+#endif /* SCAN_DURATION_SECONDS */
+
+  static void hid_device_search(void *pvParameters)
   {
-    esp_hidh_event_t event = (esp_hidh_event_t)id;
-    esp_hidh_event_data_t *param = (esp_hidh_event_data_t *)event_data;
-
-    // Find active device
-    dev_context *pDevice = NULL;
-    for (size_t i = 0; i < BluetoothHID.m_BluetoothDevicesSize; i++)
+    size_t results_len = 0;
+    esp_hid_scan_result_t *results = NULL;
+    ESP_LOGV(BTHID_TAG, "SCAN...");
+    //start scan for HID devices
+    esp_hid_scan(SCAN_DURATION_SECONDS, &results_len, &results);
+    ESP_LOGV(BTHID_TAG, "SCAN: %u results", results_len);
+    if (results_len)
     {
-      if (param->open.dev == BluetoothHID.m_pBluetoothDevices[i]->dev)
+      esp_hid_scan_result_t *r = results;
+      esp_hid_scan_result_t *cr = NULL;
+      while (r)
       {
-        pDevice = BluetoothHID.m_pBluetoothDevices[i];
-        break;
-      }
-    }
-
-    switch (event)
-    {
-    case ESP_HIDH_OPEN_EVENT:
-    {
-      //esp_hidh_dev_dump(param->open.dev, stdout);
-      // Find device and open (VID, PID?)
-      if (!pDevice)
-      {
-        for (size_t i = 0; i < BluetoothHID.m_BluetoothDevicesSize; i++)
+        /*printf("  %s: " ESP_BD_ADDR_STR ", ", (r->transport == ESP_HID_TRANSPORT_BLE) ? "BLE" : "BT ", ESP_BD_ADDR_HEX(r->bda));
+      printf("RSSI: %d, ", r->rssi);
+      printf("USAGE: %s, ", esp_hid_usage_str(r->usage));*/
+        if (r->transport == ESP_HID_TRANSPORT_BLE)
         {
-          dev_context *pDev = BluetoothHID.m_pBluetoothDevices[i];
-          if (pDev)
-          {
-            if (pDev->pbtDev->m_PID == param->open.dev->config.product_id && pDev->pbtDev->m_VID == param->open.dev->config.vendor_id)
-            {
-              pDev->dev = param->open.dev;
-              if (pDev->pbtDev)
-              {
-                ESP_LOGI(BTHID_TAG, "Device Connected!", event);
-                pDev->pbtDev->EventHandler(handler_args, base, id, event_data);
-              }
-              break;
-            }
-          }
+          cr = r;
+          /*printf("APPEARANCE: 0x%04x, ", r->ble.appearance);
+        printf("ADDR_TYPE: '%s', ", ble_addr_type_str(r->ble.addr_type));*/
         }
+        else
+        {
+          cr = r;
+          /*printf("COD: %s[", esp_hid_cod_major_str(r->bt.cod.major));
+        esp_hid_cod_minor_print(r->bt.cod.minor, stdout);
+        printf("] srv 0x%03x, ", r->bt.cod.service);
+        print_uuid(&r->bt.uuid);
+        printf(", ");*/
+        }
+        /*printf("NAME: %s ", r->name ? r->name : "");
+      printf("\n");*/
+        r = r->next;
       }
-      else
+      if (cr)
       {
-        // Device of that type already exists
-        //pDevice->EventHandler(handler_args, base, id, event_data);
+        //open the last result
+        //printf("Opening: %s: " ESP_BD_ADDR_STR ", [%s]\n", (cr->transport == ESP_HID_TRANSPORT_BLE) ? "BLE" : "BT ", ESP_BD_ADDR_HEX(cr->bda), cr->name ? cr->name : "");
+        esp_hidh_dev_t *p_dev = esp_hidh_dev_open(cr->bda, cr->transport, cr->ble.addr_type);
+        //printf("esp_hidh_dev_open returned %d\n", p_dev);
       }
-      break;
+      //free the results
+      esp_hid_scan_results_free(results);
     }
-    case ESP_HIDH_CLOSE_EVENT:
-    {
-      // Close device then call event handler
-      if (pDevice)
-      {
-        if (pDevice->pbtDev)
-          pDevice->pbtDev->EventHandler(handler_args, base, id, event_data);
-        pDevice->dev = NULL;
-      }
-      // MUST call this function to free all allocated memory by this device*/
-      esp_hidh_dev_free(param->close.dev);
-      break;
-    }
-    default:
-      //ESP_LOGI(BTHID_TAG, "EVENT: %d", event);
-      // Find opened devs and call events
-      if (pDevice)
-      {
-        if (pDevice->pbtDev)
-          pDevice->pbtDev->EventHandler(handler_args, base, id, event_data);
-      }
-      break;
-    }
+
+    vTaskDelete(NULL);
   }
+
+  static void hidh_callback(void *handler_args, esp_event_base_t base, int32_t id, void *event_data);
 };
+
+#endif

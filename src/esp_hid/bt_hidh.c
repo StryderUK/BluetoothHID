@@ -406,7 +406,7 @@ void bta_hh_co_data(uint8_t handle, uint8_t *p_rpt, uint16_t len, tBTA_HH_PROTO_
     }
 
     //if (event_loop_handle) {
-        if (event_callback) {
+    if (event_callback) {
         esp_hidh_event_data_t p = {0};
         if (report->report_type == ESP_HID_REPORT_TYPE_FEATURE) {
             p.feature.dev = dev;

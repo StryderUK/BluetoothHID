@@ -1135,7 +1135,6 @@ static void bta_hh_cback (UINT8 dev_handle, BD_ADDR addr, UINT8 event,
     tBTA_HH_CBACK_DATA    *p_buf = NULL;
     UINT16  sm_event = BTA_HH_INVALID_EVT;
     UINT8   xx = 0;
-
 #if BTA_HH_DEBUG
     APPL_TRACE_DEBUG("bta_hh_cback::HID_event [%s]", bta_hh_hid_event_name(event));
 #endif

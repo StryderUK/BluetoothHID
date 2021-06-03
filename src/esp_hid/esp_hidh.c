@@ -142,7 +142,7 @@ esp_err_t esp_hidh_deinit(void)
     return err;
 }
 
-#if CONFIG_BLUEDROID_ENABLED
+//#if CONFIG_BLUEDROID_ENABLED
 esp_hidh_dev_t *esp_hidh_dev_open(esp_bd_addr_t bda, esp_hid_transport_t transport, uint8_t remote_addr_type)
 {
     if (esp_hidh_dev_get_by_bda(bda) != NULL) {
@@ -162,7 +162,7 @@ esp_hidh_dev_t *esp_hidh_dev_open(esp_bd_addr_t bda, esp_hid_transport_t transpo
 //#endif /* CONFIG_BT_HID_HOST_ENABLED */
     return dev;
 }
-#endif /* CONFIG_BLUEDROID_ENABLED */
+//#endif /* CONFIG_BLUEDROID_ENABLED */
 
 esp_err_t esp_hidh_dev_close(esp_hidh_dev_t *dev)
 {
@@ -206,11 +206,11 @@ esp_err_t esp_hidh_dev_feature_get(esp_hidh_dev_t *dev, size_t map_index, size_t
 
 const uint8_t *esp_hidh_dev_bda_get(esp_hidh_dev_t *dev)
 {
-#if CONFIG_BLUEDROID_ENABLED
+//#if CONFIG_BLUEDROID_ENABLED
     if (esp_hidh_dev_exists(dev)) {
         return dev->bda;
     }
-#endif /* CONFIG_BLUEDROID_ENABLED */
+//#endif /* CONFIG_BLUEDROID_ENABLED */
     return NULL;
 }
 
@@ -440,7 +440,7 @@ esp_err_t esp_hidh_dev_free(esp_hidh_dev_t *dev)
     return ret;
 }
 
-#if CONFIG_BLUEDROID_ENABLED
+//#if CONFIG_BLUEDROID_ENABLED
 esp_hidh_dev_t *esp_hidh_dev_get_by_bda(esp_bd_addr_t bda)
 {
     esp_hidh_dev_t * d = NULL;
@@ -486,4 +486,4 @@ esp_hidh_dev_t *esp_hidh_dev_get_by_conn_id(uint16_t conn_id)
 #endif /* CONFIG_GATTC_ENABLE */
     return NULL;
 }
-#endif /* CONFIG_BLUEDROID_ENABLED */
+//#endif /* CONFIG_BLUEDROID_ENABLED */
