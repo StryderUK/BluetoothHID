@@ -37,6 +37,8 @@ C:\Users\<Username>\AppData\Arduino15\packages\esp32\hardware\esp32
 
 3. Overwrite files with files in the sdk_files folder
 
+**NOTE: If there are any issues and you need to revert to original, uninstall then re-install the esp boards via the Arduino board manager**
+
 ### Basic Usage
 
 See example code ([DualShock4.ino](examples/DualShock4/DualShock4.ino)) for how to use the library
