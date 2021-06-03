@@ -13,6 +13,8 @@ Initially I couldnt find a DualShock 4 library for the ESP32 that allowed pairin
 
 After a lot of debugging, this library got made and is a port of the ESP-IDF (v4.2) bluetooth and hid modules. I have therefore disabled the event queues for certain parts of the modules.
 
+The module is based off of the [ESP HID Bluetooth example](https://github.com/espressif/esp-idf/tree/master/examples/bluetooth/esp_hid_device) (for ESP-IDF)
+
 This library has been dumped together and could use a lot of cleanup. I just needed a quick library to be able to control the ESP32, and it was quicker to create a library rather than recompile the components to test and debug why things wern't working out of the box.
 
 Hopefully this library will help someone else and save the pain of trying to get fast reporting HID devices working
