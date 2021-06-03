@@ -10,10 +10,10 @@ If this is popular enough I will include the DualShock class within the main lib
 
 ## Table of Contents
 
-- [About](#about)
 - [Getting Started](#getting-started)
   - [Basic Usage](#basic-usage)
   - [Considerations](#considerations)
+- [About](#about)
 
 ## Getting Started
 
