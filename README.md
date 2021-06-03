@@ -10,7 +10,7 @@
 
 This is a port of the ESP-IDF (v4.2) bluetooth and hid modules. The android core is currently not compiled with Bluetooth HID enable. When comiling with it enabled I then had issues with the event queue freezing as the device i was testing (DualShock 4) was filling up the event queue faster than it was being read.
 
-In this library I have disabled the event queue the HID component and for input reports in the bluetooth component (events are handled straight away)
+I have therefore disabled the event queue the HID and bluetooth components so this issue doesn't happen
 
 ## Getting Started
 
