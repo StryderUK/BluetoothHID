@@ -27,7 +27,7 @@ https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32
 
 **Windows:**
 ```
-C:\Users\<Username>\AppData\Arduino15\packages\esp32\hardware\esp32
+C:\Users\<Username>\AppData\Local\Arduino15\packages\esp32\hardware\esp32
 ```
 
 **Linux:**
