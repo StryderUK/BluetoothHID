@@ -1,8 +1,10 @@
-# Bluetooth HID
+# BluetoothHID (DualShock 4 Bluetooth Example)
 
 A library to enable bluetooth HID on the ESP32 with the aeduino-esp32 core (2.0.0-alpha1).
 
 The example provided shows how to use it with a DualShock 4 and will change the LED with the left and right analogue sticks, as well as changing the rumble with LT+RT
+
+***NOTE: This library has only been tested with the DualShock 4 as this is the only HID device I need to use at the moment***
 
 ## Table of Contents
 
