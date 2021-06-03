@@ -1,11 +1,10 @@
 # Bluetooth HID
 
----
-
 ## Table of Contents
 
-- [About] (#about)
+- [About](#about)
 - [Getting Started](#getting-started)
+  - [Basic Usage](#basic-usage)
 
 ## About
 
@@ -34,8 +33,6 @@ Linux:
 ```
 
 Overwrite files with files in the sdk_files folder
-
-```
 
 ### Basic Usage
 
