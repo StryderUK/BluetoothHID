@@ -9,7 +9,7 @@
 
 ## About
 
-Initially I couldnt find a DualShock 4 library for the ESP32 that allowed pairing using the built-in BT module (some need the mac address of the connected PS4, and others need an external BT module). Luckily the latest ESP-IDF (v4.2) has a HID module that supported bluetooth. I got this to work in ESP-IDF, but the program would freeze, or I would get stack overflows due to the fast reporting of the DualShock 4 (filling the event queue up faster than it can process the events). So I decided to dig around to see if I could do some quick modifications to get it to work, and be compatible with arduino, which most of my projects are coded in.
+Initially I couldn't find a DualShock 4 library for the ESP32 that allowed pairing using the built-in BT module (some need the mac address of the connected PS4, and others need an external BT module). Luckily the latest ESP-IDF (v4.2) has a HID module that supported bluetooth. I got this to work in ESP-IDF, but the program would freeze, or I would get stack overflows due to the fast reporting of the DualShock 4 (filling the event queue up faster than it can process the events). So I decided to dig around to see if I could do some quick modifications to get it to work, and be compatible with arduino, which most of my projects are coded in.
 
 After a lot of debugging, this library got made and is a port of the ESP-IDF (v4.2) bluetooth and hid modules. I have therefore disabled the event queues for certain parts of the modules.
 
