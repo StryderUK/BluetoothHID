@@ -1,25 +1,15 @@
 # Bluetooth HID
 
+A library to enable bluetooth HID on the ESP32 with the aeduino-esp32 core (2.0.0-alpha1).
+
+The example provided shows how to use it with a DualShock 4 and will change the LED with the left and right analogue sticks, as well as changing the rumble with LT+RT
+
 ## Table of Contents
 
 - [About](#about)
 - [Getting Started](#getting-started)
   - [Basic Usage](#basic-usage)
   - [Considerations](#considerations)
-
-## About
-
-Initially I couldn't find a DualShock 4 library for the ESP32 that allowed pairing using the built-in BT module (some need the mac address of the connected PS4, and others need an external BT module). Luckily the latest ESP-IDF (v4.2) has a HID module that supported bluetooth. I got this to work in ESP-IDF, but the program would freeze, or I would get stack overflows due to the fast reporting of the DualShock 4 (filling the event queue up faster than it can process the events). So I decided to dig around to see if I could do some quick modifications to get it to work, and be compatible with arduino, which most of my projects are coded in.
-
-After a lot of debugging, this library got made and is a port of the ESP-IDF (v4.2) bluetooth and hid modules. I have therefore disabled the event queues for certain parts of the modules.
-
-The module is based off of the [ESP HID Bluetooth example](https://github.com/espressif/esp-idf/tree/master/examples/bluetooth/esp_hid_device) (for ESP-IDF)
-
-This library has been dumped together and could use a lot of cleanup. I just needed a quick library to be able to control the ESP32, and it was quicker to create a library rather than recompile the components to test and debug why things wern't working out of the box.
-
-Hopefully this library will help someone else and save the pain of trying to get fast reporting HID devices working
-
-It would be nice if espressif can enable the BT HID components in a future release, making this library redundant.
 
 ## Getting Started
 
@@ -52,6 +42,8 @@ Overwrite files with files in the sdk_files folder
 
 Pairing only needs to be done once, after that the DualShock will reconnect to the ESP32 until it is paired to something else.
 
+
+
 ### Considerations
 
 The bluetooth stack is running on core 0, and due to the fast reporting of HID devices, it would be best running all needed tasks on core 1 (which is usually the default Arduino core unless selected, so putting everthing in the loop function is usually fine).
@@ -81,3 +73,17 @@ void setup() {
   xTaskCreatePinnedToCore(&process_task, "Processing_Task", 8 * 1024, NULL, 2, NULL, 1);
 }
 ```
+
+## About
+
+Initially I couldn't find a DualShock 4 library for the ESP32 that allowed pairing using the built-in BT module (some need the mac address of the connected PS4, and others need an external BT module). Luckily the latest ESP-IDF (v4.2) has a HID module that supported bluetooth. I got this to work in ESP-IDF, but the program would freeze, or I would get stack overflows due to the fast reporting of the DualShock 4 (filling the event queue up faster than it can process the events). So I decided to dig around to see if I could do some quick modifications to get it to work, and be compatible with arduino, which most of my projects are coded in.
+
+After a lot of debugging, this library got made and is a port of the ESP-IDF (v4.2) bluetooth and hid modules. I have therefore disabled the event queues for certain parts of the modules.
+
+The module is based off of the [ESP HID Bluetooth example](https://github.com/espressif/esp-idf/tree/master/examples/bluetooth/esp_hid_device) (for ESP-IDF)
+
+This library has been dumped together and could use a lot of cleanup. I just needed a quick library to be able to control the ESP32, and it was quicker to create a library rather than recompile the components to test and debug why things wern't working out of the box.
+
+Hopefully this library will help someone else and save the pain of trying to get fast reporting HID devices working
+
+It would be nice if espressif can enable the BT HID components in a future release, making this library redundant.
