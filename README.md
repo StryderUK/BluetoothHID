@@ -13,6 +13,12 @@ This is a port of the ESP-IDF (v4.2) bluetooth and hid modules. The android core
 
 I have therefore disabled the event queue the HID and bluetooth components so this issue doesn't happen
 
+This library has been dumped together and could use a lot of cleanup. I just needed a quick library to be able to control the ESP32, and it was quicker to create a library rather than recompile the components to test and debug why things wern't working out of the box.
+
+Hopefully this library will help someone else and save the pain of trying to get fast reporting HID devices working
+
+It would be nice if espressif can enable the BT HID components in a future release, making this library redundant.
+
 ## Getting Started
 
 Install esp32 board 2.0.0-alpha1 in Arduino (board link below as of writing)
