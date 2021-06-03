@@ -1,4 +1,4 @@
-# BluetoothHID (inc. DualShock 4 Bluetooth Example)
+# BluetoothHID (w/ DualShock 4 Bluetooth Example)
 
 A library to enable Bluetooth HID on the ESP32 with the aeduino-esp32 core (2.0.0-alpha1).
 
