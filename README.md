@@ -15,13 +15,13 @@ The example provided shows how to use it with a DualShock 4 and will change the 
 
 ## Getting Started
 
-Install esp32 board 2.0.0-alpha1 in Arduino (board link below as of writing)
+1. Install esp32 board 2.0.0-alpha1 in Arduino (board link below as of writing)
 
 ```
 https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_dev_index.json
 ```
 
-Navigate to SDK location
+2. Navigate to SDK location:
 
 **Windows:**
 ```
@@ -33,7 +33,7 @@ C:\Users\<Username>\AppData\Arduino15\packages\esp32\hardware\esp32
 ~/.arduino15/packages/esp32/hardware/esp32/
 ```
 
-Overwrite files with files in the sdk_files folder
+3. Overwrite files with files in the sdk_files folder
 
 ### Basic Usage
 
